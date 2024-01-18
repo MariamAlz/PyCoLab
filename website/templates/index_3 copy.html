@@ -1,0 +1,171 @@
+{% extends "base.html" %} {% block title %}Home — PyCoLab{% endblock %} {% block content
+  %}
+
+
+  <style>
+    .form-popup {
+      display: none;
+      position: relative;
+      bottom: 0;
+      right: 15px;
+      border: 3px solid #f1f1f1;
+      z-index: 9;
+    }
+  
+    @media (min-width: 576px) {
+    .modal-dialog {
+      max-width: 400px;
+    }
+    .modal-dialog .modal-content {
+      padding: 1rem;
+    }
+  }
+  .modal-header .close {
+    margin-top: -1.5rem;
+  }
+ 
+    
+  </style>
+  
+    
+        <!-- <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" /> -->
+        <!-- <title>Simple Sidebar - Start Bootstrap Template</title> -->
+        <!-- Favicon-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" rel="stylesheet">
+        <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css'>
+
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        
+        <link href="css/styles.css" rel="stylesheet" />
+  
+    
+        <div class="d-flex" id="wrapper"> 
+            <!-- Sidebar-->
+            <div class="border-end bg-white" id="sidebar-wrapper">
+                <div class="sidebar-heading border-bottom bg-light"><i class="fa fa-folder">My files</i></div>
+                <div class="list-group list-group-flush">
+
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" >{{task.name}}</a>
+
+                    {% for code in user.codes %}
+                    {% if code.task_id == task.id %}
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3"  onClick="populateData({{ code.id }})" href="#!">{{code.name}}</a>
+                    <!-- <button type="button" class="btn btn-dark" onClick="saveData({{ code.id }})"> Save</button> -->
+                     {% endif %}
+                    {% endfor %}
+                    
+                </div>
+            </div>
+            <!-- Page content wrapper-->
+            <div id="page-content-wrapper">
+                <!-- Top navigation-->
+                <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+                    <div class="container-fluid">
+                        <!-- <button type="button" class="btn btn-dark" onClick="saveData({{ current_code.id ,note}})"  > Save {{current_code.id}}</button>
+                        <button type="button" class="btn btn-dark"> download</button>
+                        <span> <div>--</div></span> -->
+                        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#modalLoginForm"><span class="bi-plus-square-fill" ></span>&nbsp;Create file</button>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                                <li class="nav-item active"><a class="nav-link" href="#!">Home</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#!">Link</a></li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">help</a>
+                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        {% for student in admin.students %}
+                                        {% if student.first_name != user.first_name %}
+                                        {% for code in user.codes %}
+                                         {% if code.task_id == task.id %}
+                                       {% set room = code.id ~ " "  ~ student.first_name %}
+
+                                        <a class="dropdown-item" href="#!" onClick="chatWith('{{ student.first_name}}','{{ student.id}}','{{room}}', '{{code.id}}','{{task.id }}')">{{student.first_name}}</a>
+                                        {% endif %}
+                                        {% endfor %}
+                                        {% endif %}
+                                        {% endfor %}
+
+                                        <!-- <a class="dropdown-item" href="#!">Another action</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#!">Something else here</a> -->
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+                
+
+
+                <!-- Page content-->
+                <div class="container-fluid">
+                    <!-- <iframe name="note" id="note"  description= "note" src="https://trinket.io/embed/python/edd948bf08" width="100%" height="356" frameborder="0" marginwidth="0" marginheight="0" allowfullscreen></iframe> -->
+                    <form  method="POST" action ="/updatedata">
+                         <textarea name="note" id="note" class="form-control" rows="10" cols="80">{{data}}</textarea>
+                         <br />
+                         <div align="center">
+
+                            <button  class="btn btn-dark" > Save</button>
+                        </div>
+                        
+                    <!-- <h1 class="mt-4">Simple Sidebar</h1>
+                    <p>The starting state of the menu will appear collapsed on smaller screens, and will appear non-collapsed on larger screens. When toggled using the button below, the menu will change.</p>
+                    <p>
+                        Make sure to keep all page content within the
+                        
+                    </p> -->
+                    </form>
+                    <div >
+                        
+                    <textarea name="output_editor" id="output_editor" rows="10" cols="80">{{output}}</textarea>
+                    </div>
+
+
+                       <!-- <br />
+                          <div align="center">
+                              <button type="button" class="btn btn-dark" onClick="saveData({{ current_code.id ,note }})"  > Save</button>
+                          </div> -->
+
+                
+                </div>
+
+
+            </div>
+        </div>
+
+       <!-- modal form -->
+
+
+    <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form  method="POST"  action ="/add_files">
+        <div class="modal-header text-center">
+          <h4 class="modal-title w-100 font-weight-bold">Create file</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+            <div class="md-form mb-5">
+              <input type="text" class="form-control" name="name" id="name" placeholder="Title">
+            </div>
+            <div class="md-form mb-4">
+              <input type="text" class="form-control"  name= "language"  id="language"  placeholder="Language">
+            </div>
+            <button type="submit" name="add_button" id="add_button" class="btn btn-info btn-block btn-round">Create</button>
+        </form>
+        </div>
+  
+      
+      </div>
+    </div>
+
+       
+    
+
+{% endblock %}

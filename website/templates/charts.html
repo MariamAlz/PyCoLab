@@ -1,0 +1,441 @@
+{% extends "base.html" %}
+{% block title %}Home — PyCoLab{% endblock %}
+{% block content %}
+<body style="background-color: #FFFFFF;">
+  <div style="text-align: center;">
+    <h1 style="color: #000000; font-size: 3rem; margin: 20px;">Dashboard Report</h1>
+  </div>
+
+
+  <div style="display: flex; justify-content: space-around; margin-bottom: 20px;">
+    <div style="background-color: #da4335; padding: 3px; width: 300px; text-align: center; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); color: #ffffff;">
+        <h3>{{ num_students }}</h1>
+        <h5>Total Students</h5>
+    </div>
+    <div style="background-color: #44bbd9; padding: 3px; width: 300px; text-align: center; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); color: #ffffff;">
+        <h3>{{ num_tasks }}</h1>
+        <h5>Total Projects</h5>
+    </div>
+    <div style="background-color: #f8a84f; padding: 3px; width: 300px; text-align: center; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); color: #ffffff;">
+        <h3>{{ num_collaborations }}</h1>
+        <h5>Total Collaborations</h5>
+    </div>
+    <div style="background-color: #6fae61; padding: 3px; width: 300px; text-align: center; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); color: #ffffff;">
+        <h3>{{ num_requests }}</h1>
+        <h5>Total Runs</h5>
+    </div>
+</div>
+
+<! -- WebDataRocks -->
+<link href="https://cdn.webdatarocks.com/latest/webdatarocks.min.css" rel="stylesheet"/>
+<script src="https://cdn.webdatarocks.com/latest/webdatarocks.toolbar.min.js"></script>
+<script src="https://cdn.webdatarocks.com/latest/webdatarocks.js"></script>
+<! -- FusionCharts -->
+<script src="https://static.fusioncharts.com/code/latest/fusioncharts.js"></script>
+<script src="https://static.fusioncharts.com/code/latest/themes/fusioncharts.theme.fusion.js"></script>
+<! -- WebDataRocks connector for FusionCharts -->
+<script src="https://cdn.webdatarocks.com/latest/webdatarocks.fusioncharts.js"></script>
+
+
+
+<!-- <script src="wbrFusion.js"></script>-->
+
+<!--<table style="width: 100%;height: 400px">
+    <tr style="width: 50%; height: 400px">
+        <td style="width: 50%">
+            <div id="fusionchartPie"></div>
+        </td>
+        <td style="width: 50%;">
+            <div id="fusionchartBar"></div>
+        </td>
+        <td></td>
+    </tr>
+</table>-->
+
+<table style="width: 100%;height: 400px">
+    <tr style="width: 50%; height: 400px">
+        <td style="width: 50%;">
+            <div id="wdr-component" style="height:200px;"></div>
+        </td>
+        <td style="width: 50%;">
+            <div id="fusionchartArea" style="height:200px;"></div>
+        </td>
+    </tr>
+</table>
+   
+<!--
+
+ fetch("/getJson").then(response => response.json())
+  .then(data => {
+    console.log(data);
+    
+    var pivot= new WebDataRocks({
+    
+    container: "#wdr-component",
+    toolbar: false,
+    "height": 400,
+    report: {
+        "dataSource": {
+            "dataSourceType": "json",
+            "data": data
+        },
+        "slice": {
+             "rows": [{
+                "uniqueName": "name"
+             },
+             {
+            "uniqueName": "Measures"
+            }],
+            "columns": [{
+                "uniqueName": "task"
+            }],
+            "measures": [{
+                "uniqueName": "Done",
+                "aggregation": "sum"
+            }]
+        }
+    },
+    reportcomplete: function() {
+        pivot.off("reportcomplete");
+        // createAreaChart();
+        createPieChart();
+        function createPieChart() {
+    var chart = new FusionCharts({
+        type: "bar2d",
+        renderAt: "fusionchartPie",
+        width: "100%",
+        height: 400
+    });
+    
+    pivot.fusioncharts.getData({
+        type: chart.chartType(), "slice": {
+            "rows": [
+                {
+                    "uniqueName": "Task",
+                },
+            ],            
+            "columns": [
+                {
+                    "uniqueName": "Done",
+                }
+            ],
+            "measures": [
+                {
+                    "uniqueName": "name",
+                    "aggregation":"count" 
+                }
+            ]
+        }
+        },
+        function(data) {
+            chart.setJSONData(data);
+            chart.setChartAttribute("theme", "fusion");
+            chart.setChartAttribute("caption", "Student Task Completion");
+            chart.setChartAttribute("paletteColors", "#bc5cdb, #493999, #8790a8");
+            chart.render();
+        }
+
+        );
+
+    }
+
+    }
+
+});
+
+  });
+
+   fetch("/getJson").then(response => response.json())
+    .then(data => {
+      console.log(data);
+      
+      var pivot= new WebDataRocks({
+      
+      container: "#wdr-component",
+      toolbar: false,
+      "height": 400,
+      report: {
+          "dataSource": {
+              "dataSourceType": "json",
+              "data": data
+          },
+          "slice": {
+               "rows": [{
+                  "uniqueName": "name"
+               },
+               {
+              "uniqueName": "Measures"
+              }],
+              "columns": [{
+                  "uniqueName": "task"
+              }],
+              "measures": [{
+                  "uniqueName": "Done",
+                  "aggregation": "sum"
+              }]
+          }
+      },
+      reportcomplete: function() {
+          pivot.off("reportcomplete");
+          createPieChart();
+          function createPieChart() {
+      var chart = new FusionCharts({
+          type: "bar2d",
+          renderAt: "fusionchartPie",
+          width: "100%",
+          height: 400
+      });
+      
+      pivot.fusioncharts.getData({
+          type: chart.chartType(), "slice": {
+              "rows": [
+                  {
+                      "uniqueName": "Task",
+                  },
+              ],            
+              "columns": [
+                  {
+                      "uniqueName": "Done",
+                  }
+              ],
+              "measures": [
+                  {
+                      "uniqueName": "name",
+                      "aggregation":"count" 
+                  }
+              ]
+          }
+          },
+          function(data) {
+              chart.setJSONData(data);
+              chart.setChartAttribute("theme", "fusion");
+              chart.setChartAttribute("caption", "Count of names");
+              chart.setChartAttribute("paletteColors", "#bc5cdb, #493999, #8790a8");
+              chart.render();
+          }
+  
+          );
+  
+      }
+  
+      }
+  
+  });
+  
+    });-->
+<script type="text/javascript">
+
+  fetch("/getSecondJson").then(response => response.json())
+  .then(data => {
+    console.log(data);
+    jsonData = data;
+
+    var pivot1 = new WebDataRocks({
+    container: "#fusionchartArea",
+    toolbar: false,
+    "height": 400,
+    report: {
+        "dataSource": {
+            "dataSourceType": "json",
+            "data":jsonData
+        },
+        "slice": {
+             "rows": [{
+                "uniqueName": "name"
+             },
+             {
+            "uniqueName": "help"
+            }],
+            "columns": [{
+                "uniqueName": "task"
+            }],
+            "measures": [{
+                "uniqueName": "help",
+                "aggregation": "sum"
+            }]
+        }
+    },
+    reportcomplete: function() {
+        pivot1.off("reportcomplete");
+        createBarChart();
+        function createBarChart() {
+    var chart = new FusionCharts({
+        type: 'mscolumn2d',
+        renderAt: "fusionchartBar",
+        width: "100%",
+        height: 400
+    });
+    pivot1.fusioncharts.getData({
+        type: chart.chartType()
+        }, function(data) {
+        chart.setJSONData(data);
+        chart.setChartAttribute("theme", "fusion");
+        chart.setChartAttribute("caption", "Total Request by Task");
+        chart.setChartAttribute("paletteColors", "#9d87f5, #faa27f, #9afa7f, #e37ffa, #7de1fa, #f8fa7f");
+        chart.render();
+    });
+    
+}
+  
+    }
+});
+
+var jsonData =  data;
+
+var chartData = [];
+        var categories = [];
+        var seriesMap = {};
+        // jsonData = data
+
+        for (var i = 0; i < jsonData.length; i++) {
+            var dataEntry = jsonData[i];
+
+            var categoryName = dataEntry.name + " - " + dataEntry.task + " - " + dataEntry.help;
+            var seriesName = dataEntry.task;
+
+            if (!seriesMap[seriesName]) {
+                seriesMap[seriesName] = { seriesname: seriesName, data: [] };
+            }
+
+            if (categories.indexOf(categoryName) === -1) {
+                categories.push(categoryName);
+            }
+
+            seriesMap[seriesName].data.push({ value: dataEntry.ID });
+        }
+
+        for (var seriesKey in seriesMap) {
+            if (seriesMap.hasOwnProperty(seriesKey)) {
+                chartData.push(seriesMap[seriesKey]);
+            }
+        }
+
+        // Chart configuration
+        var chartConfig = {
+            type: "msbar2d",
+            renderAt: "chart-container",
+            width: "600",
+            height: "400",
+            dataFormat: "json",
+            dataSource: {
+                chart: {
+                    caption: "Multi-Series Bar Chart",
+                    subCaption: "Categorized by Name, Task, and Help",
+                    xAxisName: "Category",
+                    yAxisName: "ID",
+                    theme: "fusion"
+                },
+                categories: [
+                    {
+                        category: categories.map(function (category) {
+                            return { label: category };
+                        })
+                    }
+                ],
+                dataset: chartData
+            }
+        };
+
+        // Render chart
+        FusionCharts.ready(function () {
+            var chart = new FusionCharts(chartConfig);
+            chart.render();
+        });
+});
+
+    fetch("/getJson")
+     .then(response => response.json())
+     .then(data => {
+         console.log(data);
+         
+         var pivot = new WebDataRocks({
+             container: "#wdr-component",
+             toolbar: false,
+             height: 400,
+             report: {
+                 dataSource: {
+                     dataSourceType: "json",
+                     data: data
+                 },
+                 slice: {
+                     rows: [
+                         {
+                             uniqueName: "name"
+                         },
+                         {
+                             uniqueName: "Measures"
+                         }
+                     ],
+                     columns: [
+                         {
+                             uniqueName: "task"
+                         }
+                     ],
+                     measures: [
+                         {
+                             uniqueName: "Done",
+                             aggregation: "sum"
+                         }
+                     ]
+                 }
+             },
+             reportcomplete: function() {
+                 createPieChart();
+             }
+         });
+ 
+         function createPieChart() {
+             var chart = new FusionCharts({
+                 type: "bar2d",
+                 renderAt: "fusionchartPie",
+                 width: "100%",
+                 height: 400
+             });
+ 
+             pivot.fusioncharts.getData(
+                 {
+                     type: chart.chartType(),
+                     slice: {
+                         rows: [
+                             {
+                                 uniqueName: "Task"
+                             }
+                         ],
+                         columns: [
+                             {
+                                 uniqueName: "Done"
+                             }
+                         ],
+                         measures: [
+                             {
+                                 uniqueName: "name",
+                                 aggregation: "count"
+                             }
+                         ]
+                     }
+                 },
+                 function (data) {
+                     // Get the number of students from the chart data
+                     var numberOfStudents = data.dataset[0].data.length;
+ 
+                     // Update the caption of the chart
+                     data.chart.caption = "Number of Students: " + numberOfStudents;
+ 
+                     chart.setJSONData(data);
+                     chart.setChartAttribute("theme", "fusion");
+                     chart.setChartAttribute("paletteColors", "#bc5cdb, #493999, #8790a8");
+                     chart.render();
+                 }
+             );
+         }
+ 
+         // Render the pivot table
+         pivot.run();
+ 
+         // Render the chart
+         createPieChart();
+     });
+
+</script>
+
+{% endblock %}
